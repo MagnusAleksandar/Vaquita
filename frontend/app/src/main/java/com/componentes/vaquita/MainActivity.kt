@@ -1,4 +1,4 @@
-package com.componentes.myapplication
+package com.componentes.vaquita
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -11,7 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.componentes.myapplication.ui.theme.VaquitaTheme
+import com.componentes.vaquita.ui.theme.VaquitaTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

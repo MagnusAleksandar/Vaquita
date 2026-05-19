@@ -1,6 +1,5 @@
-package com.componentes.myapplication.ui.theme
+package com.componentes.vaquita.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

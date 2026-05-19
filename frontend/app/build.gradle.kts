@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.componentes.myapplication"
+    namespace = "com.componentes.vaquita"
     compileSdk {
         version = release(36) {
             minorApiLevel = 1

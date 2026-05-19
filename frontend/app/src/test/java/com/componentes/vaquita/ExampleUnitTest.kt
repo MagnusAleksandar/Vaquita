@@ -1,4 +1,4 @@
-package com.componentes.myapplication
+package com.componentes.vaquita
 
 import org.junit.Test
 

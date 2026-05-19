@@ -1,4 +1,4 @@
-package com.componentes.myapplication
+package com.componentes.vaquita
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
