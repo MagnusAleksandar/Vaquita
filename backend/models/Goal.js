@@ -1,29 +1,6 @@
 const mongoose = require("mongoose");
 
-const contribution = new mongoose.Schema({
-    contrbutor: { person },
-    amount:{
-        type: integer,
-        required: true
-    }
-})
-
-const person = new mongoose.Schema({
-    id: {
-        type: String,
-        required: true
-    },
-    persName:{
-        type: String,
-        required: true
-    }
-})
-
 const goal = new mongoose.Schema({
-    id: {
-        type: String,
-        required: true
-    },
     goalName:{
         type: String,
         required: true
@@ -32,7 +9,11 @@ const goal = new mongoose.Schema({
         type: String,
         required: true
     },
-    contributions: [ contribution ],
+    contributions: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Contribution",
+        required: true
+    }],
     image: {
         type: String
     }

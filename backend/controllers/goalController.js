@@ -48,7 +48,7 @@ exports.discardGoal = async (req, res) => {
     try {
         await Goal.findByIdAndDelete (req.params.mongoId);
 
-        res.json({ message: "Eliminado con éxito." })
+        res.json({ message: "Goal discarded successfully." })
     } catch (error) {
         res.status(500).json({
             error: error.message
