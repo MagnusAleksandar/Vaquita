@@ -2,6 +2,9 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
+const contRoutes = require("./routes/contribRoutes");
+const persRoutes = require("./routes/personRoutes");
+const goalRoutes = require("./routes/goalRoutes");
 const imgRoutes = require("./routes/imageRoutes");
 
 require("dotenv").config();
@@ -20,6 +23,9 @@ mongoose.connect(process.env.MONGODB_URI)
     console.log(err);
 });
 
+app.use("/api/contrib", contRoutes);
+app.use("/api/person", persRoutes);
+app.use("/api/goal", goalRoutes);
 app.use("/api/images", imgRoutes);
 
 const PORT = process.env.PORT || 5000;
