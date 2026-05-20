@@ -4,17 +4,20 @@ const router = express.Router();
 
 const {
     createImage,
-    findImages,
+    findAll,
+    findOne,
     updateImage,
     discardImage
 } = require("../controllers/imageController");
 
 router.post("/", createImage);
 
-router.get("/", findImages);
+router.get("/", findAll);
 
-router.put("/:id", updateImage);
+router.get("/:mongoId", findOne);
 
-router.delete("/:id", discardImage);
+router.put("/:mongoId", updateImage);
+
+router.delete("/:mongoId", discardImage);
 
 module.exports = router;

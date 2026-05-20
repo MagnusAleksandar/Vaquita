@@ -2,7 +2,6 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
-const contRoutes = require("./routes/contribRoutes");
 const persRoutes = require("./routes/personRoutes");
 const goalRoutes = require("./routes/goalRoutes");
 const imgRoutes = require("./routes/imageRoutes");
@@ -23,10 +22,9 @@ mongoose.connect(process.env.MONGODB_URI)
     console.log(err);
 });
 
-app.use("/api/contrib", contRoutes);
 app.use("/api/person", persRoutes);
 app.use("/api/goal", goalRoutes);
-app.use("/api/images", imgRoutes);
+app.use("/api/image", imgRoutes);
 
 const PORT = process.env.PORT || 5000;
 
@@ -39,3 +37,5 @@ try {
         error: error.message
     });
 }
+
+// sudo systemctl start mongod

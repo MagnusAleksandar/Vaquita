@@ -4,17 +4,20 @@ const router = express.Router();
 
 const {
     createPerson,
-    findPeople,
+    findAll,
+    findOne,
     updatePerson,
     discardPerson
 } = require("../controllers/personController");
 
 router.post("/", createPerson);
 
-router.get("/", findPeople);
+router.get("/", findAll);
 
-router.put("/:id", updatePerson);
+router.get("/:mongoId", findOne);
 
-router.delete("/:id", discardPerson);
+router.put("/:mongoId", updatePerson);
+
+router.delete("/:mongoId", discardPerson);
 
 module.exports = router;

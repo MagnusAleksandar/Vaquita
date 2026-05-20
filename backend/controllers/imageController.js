@@ -4,8 +4,11 @@ exports.createImage = async (req, res) => {
     try {
         const image = new Image(req.body);
         await image.save();
-
-        res.status(200).json(image);
+        if (image){
+            res.status(200).json(image);
+        }else{
+            res.json({ message: "Unable to create image." })
+        }
     }
     catch (error) {
         res.status(500).json({
@@ -14,13 +17,31 @@ exports.createImage = async (req, res) => {
     }
 }
 
-exports.findImages = async (req, res) => {
+exports.findAll = async (req, res) => {
     try {
         const images = await Image.find();
-
-        res.status(200).json(images);
+        if(images){
+            res.status(200).json(images);
+        }else{
+            res.json({ message: "No images found." })
+        }
     }
     catch (error) {
+        res.status(500).json({
+            error: error.message
+        });
+    }
+}
+
+exports.findOne = async (req, res) => {
+    try {
+        const image = await Image.findById(req.params.mongoId)
+        if(image){
+            res.status(200).json(image)
+        }else{
+            res.json({ message: "No Image found." })
+        }
+    } catch (error) {
         res.status(500).json({
             error: error.message
         });
@@ -35,7 +56,11 @@ exports.updateImage = async (req, res) => {
             { new: true }
         );
 
-        res.status(200).json(updtdImage);
+        if(updtdImage){
+            res.status(200).json(updtdImage);
+        }else{
+            res.json({ message: "No Image found." })
+        }
     }
     catch (error) {
         res.status(500).json({
@@ -46,9 +71,12 @@ exports.updateImage = async (req, res) => {
 
 exports.discardImage = async (req, res) => {
     try {
-        await Image.findByIdAndDelete(req.params.mongoId);
-
-        res.status(200).json({ message: "Image discarded successfully" });
+        const deleted = await Image.findByIdAndDelete(req.params.mongoId);
+        if (deleted){
+            res.status(200).json({ message: "Image discarded successfully" });
+        }else{
+            res.json({ message: "No Image found." })
+        }
     }
     catch (error) {
         res.status(500).json({
