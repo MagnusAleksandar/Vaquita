@@ -1,6 +1,6 @@
 package com.componentes.vaquita.data.services
 
-import com.example.vaquita.model.Goal
+import com.componentes.vaquita.domain.model.Goal
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -9,12 +9,12 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
-interface GoalApiService {
+interface GoalApi {
     // Constantes
     companion object{
-        const val BASE = "api/goals"
+        const val BASE = "api/goal"
         const val ID = "mongoId"
-        const val TEMPLATE = "$BASE/{id}"
+        const val TEMPLATE = "$BASE/{$ID}"
     }
 
     // Crea meta

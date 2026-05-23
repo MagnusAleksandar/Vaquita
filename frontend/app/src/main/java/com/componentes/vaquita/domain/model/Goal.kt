@@ -1,4 +1,4 @@
-package com.example.vaquita.model
+package com.componentes.vaquita.domain.model
 
 import android.media.Image
 import java.time.LocalDate
