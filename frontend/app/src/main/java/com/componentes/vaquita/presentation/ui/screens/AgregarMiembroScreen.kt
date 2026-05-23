@@ -1,4 +1,4 @@
-package com.componentes.vaquita.ui.theme.screens
+package com.componentes.vaquita.presentation.ui.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,10 +11,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun EditarAporteScreen(
+fun AgregarMiembroScreen(
     onGuardar: () -> Unit,
-    onCancelar: () -> Unit,
     onInicio: () -> Unit,
+    onAportes: () -> Unit,
     onMiembros: () -> Unit,
     onPerfil: () -> Unit
 ) {
@@ -33,14 +33,14 @@ fun EditarAporteScreen(
                 )
 
                 NavigationBarItem(
-                    selected = true,
-                    onClick = {},
+                    selected = false,
+                    onClick = onAportes,
                     icon = { Text("💰") },
                     label = { Text("Aportes") }
                 )
 
                 NavigationBarItem(
-                    selected = false,
+                    selected = true,
                     onClick = onMiembros,
                     icon = { Text("👨") },
                     label = { Text("Miembros") }
@@ -65,7 +65,7 @@ fun EditarAporteScreen(
         ) {
 
             Text(
-                text = "Editar aporte",
+                text = "Agregar miembro",
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -73,10 +73,10 @@ fun EditarAporteScreen(
             Spacer(modifier = Modifier.height(25.dp))
 
             OutlinedTextField(
-                value = "300000",
+                value = "",
                 onValueChange = {},
                 label = {
-                    Text("Monto")
+                    Text("Nombre completo")
                 },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp)
@@ -85,10 +85,10 @@ fun EditarAporteScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
-                value = "Aporte Televisor",
+                value = "",
                 onValueChange = {},
                 label = {
-                    Text("Descripción")
+                    Text("Correo")
                 },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp)
@@ -97,10 +97,10 @@ fun EditarAporteScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
-                value = "Juan Pérez",
+                value = "",
                 onValueChange = {},
                 label = {
-                    Text("Miembro")
+                    Text("Teléfono")
                 },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp)
@@ -121,21 +121,10 @@ fun EditarAporteScreen(
                 shape = RoundedCornerShape(18.dp)
             ) {
 
-                Text("Guardar cambios")
-            }
-
-            Spacer(modifier = Modifier.height(14.dp))
-
-            OutlinedButton(
-                onClick = onCancelar,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(55.dp),
-
-                shape = RoundedCornerShape(18.dp)
-            ) {
-
-                Text("Cancelar")
+                Text(
+                    text = "Guardar miembro",
+                    fontSize = 16.sp
+                )
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.componentes.vaquita.ui.theme.screens
+package com.componentes.vaquita.presentation.ui.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,10 +11,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun AgregarMiembroScreen(
+fun EditarAporteScreen(
     onGuardar: () -> Unit,
+    onCancelar: () -> Unit,
     onInicio: () -> Unit,
-    onAportes: () -> Unit,
     onMiembros: () -> Unit,
     onPerfil: () -> Unit
 ) {
@@ -33,14 +33,14 @@ fun AgregarMiembroScreen(
                 )
 
                 NavigationBarItem(
-                    selected = false,
-                    onClick = onAportes,
+                    selected = true,
+                    onClick = {},
                     icon = { Text("💰") },
                     label = { Text("Aportes") }
                 )
 
                 NavigationBarItem(
-                    selected = true,
+                    selected = false,
                     onClick = onMiembros,
                     icon = { Text("👨") },
                     label = { Text("Miembros") }
@@ -65,7 +65,7 @@ fun AgregarMiembroScreen(
         ) {
 
             Text(
-                text = "Agregar miembro",
+                text = "Editar aporte",
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -73,10 +73,10 @@ fun AgregarMiembroScreen(
             Spacer(modifier = Modifier.height(25.dp))
 
             OutlinedTextField(
-                value = "",
+                value = "300000",
                 onValueChange = {},
                 label = {
-                    Text("Nombre completo")
+                    Text("Monto")
                 },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp)
@@ -85,10 +85,10 @@ fun AgregarMiembroScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
-                value = "",
+                value = "Aporte Televisor",
                 onValueChange = {},
                 label = {
-                    Text("Correo")
+                    Text("Descripción")
                 },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp)
@@ -97,10 +97,10 @@ fun AgregarMiembroScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
-                value = "",
+                value = "Juan Pérez",
                 onValueChange = {},
                 label = {
-                    Text("Teléfono")
+                    Text("Miembro")
                 },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp)
@@ -121,10 +121,21 @@ fun AgregarMiembroScreen(
                 shape = RoundedCornerShape(18.dp)
             ) {
 
-                Text(
-                    text = "Guardar miembro",
-                    fontSize = 16.sp
-                )
+                Text("Guardar cambios")
+            }
+
+            Spacer(modifier = Modifier.height(14.dp))
+
+            OutlinedButton(
+                onClick = onCancelar,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(55.dp),
+
+                shape = RoundedCornerShape(18.dp)
+            ) {
+
+                Text("Cancelar")
             }
         }
     }

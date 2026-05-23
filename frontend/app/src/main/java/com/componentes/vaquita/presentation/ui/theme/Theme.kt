@@ -1,4 +1,4 @@
-package com.componentes.vaquita.ui.theme
+package com.componentes.vaquita.presentation.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

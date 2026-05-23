@@ -1,4 +1,4 @@
-package com.componentes.vaquita.ui.theme
+package com.componentes.vaquita.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

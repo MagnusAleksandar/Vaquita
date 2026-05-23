@@ -1,4 +1,4 @@
-package com.componentes.vaquita.ui.theme
+package com.componentes.vaquita.presentation.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

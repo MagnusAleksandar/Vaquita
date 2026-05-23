@@ -1,4 +1,4 @@
-package com.componentes.vaquita.ui.theme.screens
+package com.componentes.vaquita.presentation.ui.screens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*

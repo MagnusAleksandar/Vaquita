@@ -5,9 +5,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.componentes.vaquita.ui.theme.screens.AgregarMiembroScreen
-import com.componentes.vaquita.ui.theme.screens.AportesScreen
-import com.componentes.vaquita.ui.theme.screens.EditarAporteScreen
+import com.componentes.vaquita.presentation.ui.screens.AgregarMiembroScreen
+import com.componentes.vaquita.presentation.ui.screens.AportesScreen
+import com.componentes.vaquita.presentation.ui.screens.EditarAporteScreen
 import com.example.appmetas.ui.screens.*
 
 sealed class Screen {
