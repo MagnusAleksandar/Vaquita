@@ -7,7 +7,7 @@ exports.createPerson = async (req, res) => {
         if (person){
             res.status(200).json(person);
         }else{
-            res.json({ message: "Unable to create person." })
+            res.status(404).json({ message: "Unable to create person." })
         }
 
     } catch (error) {
@@ -23,7 +23,7 @@ exports.findAll = async (req, res) => {
         if(people){
             res.status(200).json(people);
         }else{
-            res.json({ message: "No one found." })
+            res.status(404).json({ message: "No one found." })
         }
     }
     catch (error) {
@@ -39,7 +39,7 @@ exports.findOne = async (req, res) => {
         if(person){
             res.status(200).json(person)
         }else{
-            res.json({ message: "No Person found." })
+            res.status(404).json({ message: "No Person found." })
         }
     } catch (error) {
         res.status(500).json({
@@ -59,7 +59,7 @@ exports.updatePerson = async (req, res) => {
         if(updtdPerson){
             res.status(200).json(updtdPerson);            
         }else{
-            res.json({ message: "No Person found." })
+            res.status(404).json({ message: "No Person found." })
         }
     }
     catch (error) {
@@ -75,7 +75,7 @@ exports.discardPerson = async (req, res) => {
         if (deleted){
             res.status(200).json({ message: "Person deleted successfully" });
         }else{
-            res.json({ message: "No Person found." })
+            res.status(404).json({ message: "No Person found." })
         }
     }
     catch (error) {

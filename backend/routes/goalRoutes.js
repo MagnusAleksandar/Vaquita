@@ -35,11 +35,11 @@ router.post("/:mongoId/contributions", createContribution);
 
 router.get("/:mongoId/contributions", findAllContributions);
 
-router.get("/:mongoId/contributions/:mongoId", findOneContribution);
+router.get("/:goalId/contributions/:contributionId", findOneContribution);
 
-router.put("/:mongoId/contributions/:mongoId", updateContribution);
+router.put("/:goalId/contributions/:contributionId", updateContribution);
 
-router.delete("/:mongoId/contributions/:mongoId", discardContribution);
+router.delete("/:goalId/contributions/:contributionId", discardContribution);
 
 
 module.exports = router;

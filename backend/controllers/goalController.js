@@ -8,7 +8,7 @@ exports.createGoal = async (req, res) => {
         if (goal){
             res.status(200).json(goal);
         }else{
-            res.json({ message: "Unable to create goal." })
+            res.status(404).json({ message: "Unable to create goal." })
         }
 
     } catch (error) {
@@ -25,7 +25,7 @@ exports.findAllGoals = async (req, res) => {
         if(goals){
             res.status(200).json(goals);
         }else{
-            res.json({ message: "No goals found." })
+            res.status(404).json({ message: "No goals found." })
         }
     }
     catch (error) {
@@ -37,11 +37,11 @@ exports.findAllGoals = async (req, res) => {
 
 exports.findOneGoal = async (req, res) => {
     try {
-        const goal = await Goal.findOne({ goalName: req.query.goalName })
+        const goal = await Goal.findById(req.params.mongoId)
         if(goal){
             res.status(200).json(goal)
         }else{
-            res.json({ message: "No Goal found." })
+            res.status(404).json({ message: "No Goal found." })
         }
     } catch (error) {
         res.status(500).json({
@@ -62,7 +62,7 @@ exports.updateGoal = async (req, res) => {
         if(updtdGoal){
             res.status(200).json(updtdGoal);
         }else{
-            res.json({ message: "No Goal found." })
+            res.status(404).json({ message: "No Goal found." })
         }
     } catch (error) {
         res.status(500).json({
@@ -77,7 +77,7 @@ exports.discardGoal = async (req, res) => {
         if (deleted){
             res.status(200).json({ message: "Goal discarded successfully." });
         }else{
-            res.json({ message: "No Goal found." });
+            res.status(404).json({ message: "No Goal found." });
         }
     } catch (error) {
         res.status(500).json({
@@ -96,7 +96,7 @@ exports.createContribution = async (req, res) => {
             await goal.save();
             res.status(200).json(goal);
         }else{
-            res.json({ message: "No Goal found." })
+            res.status(404).json({ message: "No Goal found." })
         }
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -107,9 +107,13 @@ exports.findAllContributions = async (req, res) => {
     try {
         const goal = await Goal.findById(req.params.goalId);
         if(goal){
-            res.status(200).json(goal.contributions);
+            if (goal.contributions){
+                res.status(200).json(goal.contributions);
+            }else{
+                res.status(404).json({ message: "No Contribution found." })
+            }
         }else{
-            res.json({ message: "No Goal found." })
+            res.status(404).json({ message: "No Goal found." })
         }
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -118,16 +122,16 @@ exports.findAllContributions = async (req, res) => {
 
 exports.findOneContribution = async (req, res) => {
     try {
-        const goal = await Goal.findById(req.query.goalId);
-        if(goal){
+        const goal = await Goal.findById(req.params.goalId);
+        if (goal) {
             const contribution = goal.contributions.id(req.params.contributionId);
-            if(contribution){
+            if (contribution) {
                 res.status(200).json(contribution);
-            }else{
-                res.json({ message: "No Contribution found." })
+            } else {
+                res.status(404).json({ message: "No Contribution found." });
             }
-        }else{
-            res.json({ message: "No Goal found." })
+        } else {
+            res.status(404).json({ message: "No Goal for this Contribution found." });
         }
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -144,10 +148,10 @@ exports.updateContribution = async (req, res) => {
                 await goal.save();
                 res.status(200).json(goal);
             }else{
-                res.json({ message: "No Contribution found." })
+                res.status(404).json({ message: "No Contribution found." })
             }
         }else{
-            res.json({ message: "No Goal found." })
+            res.status(404).json({ message: "No Goal found." })
         }
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -164,10 +168,10 @@ exports.discardContribution = async (req, res) => {
                 await goal.save();
                 res.status(200).json(goal);
             }else{
-                res.json({ message: "No Contribution found." })
+                res.status(404).json({ message: "No Contribution found." })
             }
         }else{
-            res.json({ message: "No Goal found." })
+            res.status(404).json({ message: "No Goal found." })
         }
     } catch (error) {
         res.status(500).json({ error: error.message });

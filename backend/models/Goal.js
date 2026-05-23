@@ -3,8 +3,7 @@ const mongoose = require("mongoose");
 const contribution = new mongoose.Schema({
     contributor: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Person",
-        required: true
+        ref: "Person"
     },
     amount:{
         type: Number
@@ -13,8 +12,7 @@ const contribution = new mongoose.Schema({
 
 const goal = new mongoose.Schema({
     goalName:{
-        type: String,
-        required: true
+        type: String
     },
     dueDate:{
         type: String

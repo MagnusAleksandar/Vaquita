@@ -5,8 +5,7 @@ const person = new mongoose.Schema({
         type: String
     },
     idNum:{
-        type: String,
-        required: true
+        type: String
     }
 })
 

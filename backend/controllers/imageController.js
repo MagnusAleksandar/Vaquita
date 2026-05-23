@@ -7,7 +7,7 @@ exports.createImage = async (req, res) => {
         if (image){
             res.status(200).json(image);
         }else{
-            res.json({ message: "Unable to create image." })
+            res.status(404).json({ message: "Unable to create image." })
         }
     }
     catch (error) {
@@ -23,7 +23,7 @@ exports.findAll = async (req, res) => {
         if(images){
             res.status(200).json(images);
         }else{
-            res.json({ message: "No images found." })
+            res.status(404).json({ message: "No images found." })
         }
     }
     catch (error) {
@@ -39,7 +39,7 @@ exports.findOne = async (req, res) => {
         if(image){
             res.status(200).json(image)
         }else{
-            res.json({ message: "No Image found." })
+            res.status(404).json({ message: "No Image found." })
         }
     } catch (error) {
         res.status(500).json({
@@ -59,7 +59,7 @@ exports.updateImage = async (req, res) => {
         if(updtdImage){
             res.status(200).json(updtdImage);
         }else{
-            res.json({ message: "No Image found." })
+            res.status(404).json({ message: "No Image found." })
         }
     }
     catch (error) {
@@ -75,7 +75,7 @@ exports.discardImage = async (req, res) => {
         if (deleted){
             res.status(200).json({ message: "Image discarded successfully" });
         }else{
-            res.json({ message: "No Image found." })
+            res.status(404).json({ message: "No Image found." })
         }
     }
     catch (error) {
