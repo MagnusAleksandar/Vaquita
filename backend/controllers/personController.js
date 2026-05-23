@@ -35,7 +35,7 @@ exports.findAll = async (req, res) => {
 
 exports.findOne = async (req, res) => {
     try {
-        const person = await Person.findById(req.params.mongoId)
+        const person = await Person.findOne({persName: req.params.mongoId})
         if(person){
             res.status(200).json(person)
         }else{

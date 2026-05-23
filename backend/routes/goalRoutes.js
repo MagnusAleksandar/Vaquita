@@ -48,7 +48,10 @@ Create:
 {
     "goalName": "Nombre de la meta",
     "dueDate": "AAAA-MM-DD",
-    "contributions": [ "_id" <- de la contribución ],
+    "contributions": [ 
+        "contributor": "_id", <- de la contribución
+        "amount": n
+    ],
     "image": "_id" <- de la imagen
 }
 
@@ -56,7 +59,12 @@ Example:
 {
     "goalName": "Comprar carro",
     "dueDate": "2026-01-01",
-    "contributions": [ "6a0dc6589a212803ac363f70" ],
+    "contributions": [
+        {
+            "contributor": "6a0dc6589a212803ac363f70",
+            "amount": 100000
+        }
+    ],
     "image": "6a0d16e1b9bf9d974cd337e2"
 }
 */

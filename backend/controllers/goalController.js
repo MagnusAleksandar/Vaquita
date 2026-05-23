@@ -37,7 +37,7 @@ exports.findAllGoals = async (req, res) => {
 
 exports.findOneGoal = async (req, res) => {
     try {
-        const goal = await Goal.findById(req.params.mongoId)
+        const goal = await Goal.findOne({ goalName: req.query.goalName })
         if(goal){
             res.status(200).json(goal)
         }else{
@@ -118,7 +118,7 @@ exports.findAllContributions = async (req, res) => {
 
 exports.findOneContribution = async (req, res) => {
     try {
-        const goal = await Goal.findById(req.params.goalId);
+        const goal = await Goal.findById(req.query.goalId);
         if(goal){
             const contribution = goal.contributions.id(req.params.contributionId);
             if(contribution){
