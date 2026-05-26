@@ -8,6 +8,9 @@ const contributionSchema = new mongoose.Schema({
     amount: {
         type: Number
     },
+    description: {
+        type: String
+    },
     createdAt: {
         type: Date,
         default: Date.now

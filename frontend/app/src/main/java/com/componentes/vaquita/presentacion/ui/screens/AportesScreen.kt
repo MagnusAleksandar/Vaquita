@@ -17,9 +17,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.componentes.vaquita.dominio.model.Contribution
-import com.componentes.vaquita.presentacion.ui.states.MetasUiState
-import com.componentes.vaquita.presentacion.ui.viewmodel.MetasViewModel
+import com.componentes.vaquita.dominio.models.Contribution
+import com.componentes.vaquita.dominio.states.UiState
+import com.componentes.vaquita.presentacion.viewmodels.MetasViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -27,7 +27,6 @@ import java.util.*
 fun AportesScreen(
     viewModel: MetasViewModel,
     onRealizarAportes: () -> Unit,
-    onEditarAporte: (Contribution, String, String) -> Unit,
     onInicio: () -> Unit,
     onMiembros: () -> Unit
 ) {
@@ -89,16 +88,17 @@ fun AportesScreen(
             Spacer(modifier = Modifier.height(20.dp))
 
             when (val state = uiState) {
-                is MetasUiState.Loading -> {
+                is UiState.Loading -> {
                     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         CircularProgressIndicator()
                     }
                 }
-                is MetasUiState.Error -> {
+                is UiState.Error -> {
                     Text("Error: ${state.message}", color = Color.Red)
                 }
-                is MetasUiState.Success -> {
-                    val allContributions = state.goals.flatMap { goal ->
+                is UiState.Success -> {
+                    val goals = state.data
+                    val allContributions = goals.flatMap { goal ->
                         goal.contributions?.map { Triple(it, goal._id ?: "", goal.name ?: "Meta desconocida") } ?: emptyList()
                     }.sortedByDescending { it.first.createdAt }
 
@@ -110,8 +110,7 @@ fun AportesScreen(
                                 Card(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(vertical = 8.dp)
-                                        .clickable { onEditarAporte(contribution, goalId, goalName) },
+                                        .padding(vertical = 8.dp),
                                     shape = RoundedCornerShape(20.dp)
                                 ) {
                                     Column(modifier = Modifier.padding(18.dp)) {
@@ -121,6 +120,16 @@ fun AportesScreen(
                                             fontSize = 18.sp
                                         )
                                         Spacer(modifier = Modifier.height(6.dp))
+                                        
+                                        if (!contribution.description.isNullOrBlank()) {
+                                            Text(
+                                                text = contribution.description,
+                                                color = Color.Gray,
+                                                fontSize = 14.sp,
+                                                modifier = Modifier.padding(bottom = 6.dp)
+                                            )
+                                        }
+
                                         Text(
                                             text = "$${contribution.amount}",
                                             color = Color(0xFF16A34A),

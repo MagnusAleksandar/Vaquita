@@ -1,8 +1,8 @@
 package com.componentes.vaquita
 
-import com.componentes.vaquita.dominio.model.Contribution
-import com.componentes.vaquita.dominio.model.Goal
-import com.componentes.vaquita.dominio.model.Person
+import com.componentes.vaquita.dominio.models.Contribution
+import com.componentes.vaquita.dominio.models.Goal
+import com.componentes.vaquita.dominio.models.Person
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -22,7 +22,7 @@ class GoalProgressTest {
             amount = 500000,
             dueDate = "2026-12-31",
             contributions = contribuciones,
-            image = "url_imagen"
+            image = com.componentes.vaquita.dominio.models.Image(_id = "img1", url = "url_imagen", name = "Test Image")
         )
 
         // 2. Ejecución (When)

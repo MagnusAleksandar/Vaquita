@@ -10,9 +10,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.componentes.vaquita.presentacion.ui.viewmodel.GoalCreationState
-import com.componentes.vaquita.presentacion.ui.viewmodel.MetasViewModel
+import com.componentes.vaquita.dominio.models.enums.GoalImage
+import com.componentes.vaquita.dominio.states.UiState
+import com.componentes.vaquita.presentacion.viewmodels.MetasViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CrearMetaScreen(
     viewModel: MetasViewModel,
@@ -27,11 +29,13 @@ fun CrearMetaScreen(
     var name by remember { mutableStateOf("") }
     var amount by remember { mutableStateOf("") }
     var dueDate by remember { mutableStateOf("") }
-    var urlImage by remember { mutableStateOf("") }
+    
+    var expandedCategory by remember { mutableStateOf(false) }
+    var categorySeleccionada by remember { mutableStateOf(GoalImage.NONE) }
 
     // Manejo de éxito
     LaunchedEffect(creationState) {
-        if (creationState is GoalCreationState.Success) {
+        if (creationState is UiState.Success) {
             onCrear()
             viewModel.resetCreationState()
         }
@@ -61,7 +65,7 @@ fun CrearMetaScreen(
             }
         }
     ) { padding ->
-        if (creationState is GoalCreationState.Loading) {
+        if (creationState is UiState.Loading) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
@@ -80,9 +84,9 @@ fun CrearMetaScreen(
 
                 Spacer(modifier = Modifier.height(25.dp))
 
-                if (creationState is GoalCreationState.Error) {
+                if (creationState is UiState.Error) {
                     Text(
-                        text = (creationState as GoalCreationState.Error).message,
+                        text = (creationState as UiState.Error).message,
                         color = Color.Red,
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
@@ -118,20 +122,41 @@ fun CrearMetaScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                OutlinedTextField(
-                    value = urlImage,
-                    onValueChange = { urlImage = it },
-                    label = { Text("URL de la imagen (opcional)") },
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp),
-                    placeholder = { Text("https://ejemplo.com/foto.jpg") }
-                )
+                // Selector de Categoría (Enum)
+                ExposedDropdownMenuBox(
+                    expanded = expandedCategory,
+                    onExpandedChange = { expandedCategory = !expandedCategory }
+                ) {
+                    OutlinedTextField(
+                        value = categorySeleccionada.displayName,
+                        onValueChange = {},
+                        readOnly = true,
+                        label = { Text("Categoría (Imagen predefinida)") },
+                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedCategory) },
+                        modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable, true).fillMaxWidth(),
+                        shape = RoundedCornerShape(16.dp)
+                    )
+                    ExposedDropdownMenu(
+                        expanded = expandedCategory,
+                        onDismissRequest = { expandedCategory = false }
+                    ) {
+                        GoalImage.entries.forEach { category ->
+                            DropdownMenuItem(
+                                text = { Text(category.displayName) },
+                                onClick = {
+                                    categorySeleccionada = category
+                                    expandedCategory = false
+                                }
+                            )
+                        }
+                    }
+                }
 
                 Spacer(modifier = Modifier.height(30.dp))
 
                 Button(
                     onClick = {
-                        viewModel.createGoal(name, amount, dueDate, urlImage)
+                        viewModel.createGoal(name, amount, dueDate, categorySeleccionada.imageUrl)
                     },
                     modifier = Modifier
                         .fillMaxWidth()

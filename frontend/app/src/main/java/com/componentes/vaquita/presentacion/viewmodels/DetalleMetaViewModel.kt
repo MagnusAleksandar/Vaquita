@@ -1,10 +1,10 @@
-package com.componentes.vaquita.presentacion.ui.viewmodel
+package com.componentes.vaquita.presentacion.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.componentes.vaquita.data.services.repository.GoalRepository
-import com.componentes.vaquita.presentacion.ui.states.DetalleMetaUiState
+import com.componentes.vaquita.data.repositories.GoalRepository
+import com.componentes.vaquita.dominio.states.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,17 +13,17 @@ import kotlinx.coroutines.launch
 import android.util.Log
 
 class DetalleMetaViewModel(
-    application: Application,
-    private val repository: GoalRepository
+    application: Application
 ) : AndroidViewModel(application) {
+    private val repository = GoalRepository()
 
-    private val _uiState = MutableStateFlow<DetalleMetaUiState>(DetalleMetaUiState.Idle)
-    val uiState: StateFlow<DetalleMetaUiState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow<UiState<com.componentes.vaquita.dominio.models.Goal>>(UiState.Idle)
+    val uiState: StateFlow<UiState<com.componentes.vaquita.dominio.models.Goal>> = _uiState.asStateFlow()
 
     // Obtener los detalles de una meta específica y calcular su progreso
     fun getGoalById(id: String) {
         Log.d("VAQUITA_APP", "Cargando detalles de la meta con ID: $id")
-        _uiState.value = DetalleMetaUiState.Loading
+        _uiState.value = UiState.Loading
         viewModelScope.launch {
             val result = repository.getGoalById(id)
             
@@ -38,15 +38,15 @@ class DetalleMetaViewModel(
                     Log.d("VAQUITA_APP", "Meta: ${goal.name}")
                     Log.d("VAQUITA_APP", "Progreso calculado: $totalAportado de $totalMeta ($porcentaje%)")
                     
-                    _uiState.value = DetalleMetaUiState.Success(goal)
+                    _uiState.value = UiState.Success(goal)
                 } else {
                     Log.e("VAQUITA_APP", "La meta llegó nula desde el repositorio")
-                    _uiState.value = DetalleMetaUiState.Error("No se encontró la información")
+                    _uiState.value = UiState.Error("No se encontró la información")
                 }
             } else {
                 val error = result.exceptionOrNull()?.message ?: "Error desconocido"
                 Log.e("VAQUITA_APP", "Error al cargar detalle de meta: $error")
-                _uiState.value = DetalleMetaUiState.Error(error)
+                _uiState.value = UiState.Error(error)
             }
         }
     }

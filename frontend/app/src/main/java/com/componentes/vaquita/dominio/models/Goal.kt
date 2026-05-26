@@ -1,4 +1,4 @@
-package com.componentes.vaquita.dominio.model
+package com.componentes.vaquita.dominio.models
 
 data class Goal(
     val _id: String?,
@@ -6,5 +6,5 @@ data class Goal(
     var amount: Int?,
     var dueDate: String?,
     var contributions: MutableList<Contribution>?,
-    var image: String?
+    var image: Image?
 )

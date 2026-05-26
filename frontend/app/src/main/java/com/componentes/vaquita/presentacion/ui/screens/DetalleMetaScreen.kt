@@ -16,8 +16,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.componentes.vaquita.presentacion.ui.states.DetalleMetaUiState
-import com.componentes.vaquita.presentacion.ui.viewmodel.DetalleMetaViewModel
+import com.componentes.vaquita.dominio.states.UiState
+import com.componentes.vaquita.presentacion.viewmodels.DetalleMetaViewModel
 
 @Composable
 fun DetalleMetaScreen(
@@ -25,7 +25,6 @@ fun DetalleMetaScreen(
     viewModel: DetalleMetaViewModel,
     onBack: () -> Unit,
     onRealizarAporte: () -> Unit,
-    onModificarMeta: () -> Unit,
     onInicio: () -> Unit,
     onAportes: () -> Unit,
     onMiembros: () -> Unit
@@ -61,18 +60,18 @@ fun DetalleMetaScreen(
         }
     ) { padding ->
         when (val state = uiState) {
-            is DetalleMetaUiState.Loading -> {
+            is UiState.Loading -> {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator()
                 }
             }
-            is DetalleMetaUiState.Error -> {
+            is UiState.Error -> {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Text("Error: ${state.message}", color = Color.Red)
                 }
             }
-            is DetalleMetaUiState.Success -> {
-                val meta = state.goal
+            is UiState.Success -> {
+                val meta = state.data
                 Column(
                     modifier = Modifier
                         .padding(padding)
@@ -112,14 +111,14 @@ fun DetalleMetaScreen(
                                 }
                                 
                                 // Mostrar imagen si existe
-                                if (!meta.image.isNullOrBlank()) {
+                                if (!meta.image?.url.isNullOrBlank()) {
                                     Spacer(modifier = Modifier.width(10.dp))
                                     Card(
                                         shape = RoundedCornerShape(12.dp),
                                         modifier = Modifier.size(80.dp)
                                     ) {
                                         AsyncImage(
-                                            model = meta.image,
+                                            model = meta.image?.url,
                                             contentDescription = "Imagen de la meta",
                                             modifier = Modifier.fillMaxSize(),
                                             contentScale = ContentScale.Crop
@@ -191,18 +190,6 @@ fun DetalleMetaScreen(
                         )
                     ) {
                         Text("Añadir aporte")
-                    }
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    Button(
-                        onClick = onModificarMeta,
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF16A34A).copy(alpha = 0.7f)
-                        )
-                    ) {
-                        Text("Modificar meta")
                     }
                 }
             }

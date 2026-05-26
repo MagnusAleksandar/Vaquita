@@ -7,7 +7,9 @@ exports.createGoal = async (req, res) => {
         const goal = new Goal(req.body);
         await goal.save();
         if (goal) {
-            const savedGoal = await Goal.findById(goal._id).populate("contributions.contributor");
+            const savedGoal = await Goal.findById(goal._id)
+                .populate("contributions.contributor")
+                .populate("image");
             res.status(200).json(savedGoal);
         } else {
             res.status(404).json({ message: "No se pudo crear la meta." })
@@ -20,7 +22,9 @@ exports.createGoal = async (req, res) => {
 
 exports.findAllGoals = async (req, res) => {
     try {
-        const goals = await Goal.find().populate("contributions.contributor");
+        const goals = await Goal.find()
+            .populate("contributions.contributor")
+            .populate("image");
         if (goals) {
             res.status(200).json(goals);
         } else {
@@ -33,42 +37,13 @@ exports.findAllGoals = async (req, res) => {
 
 exports.findOneGoal = async (req, res) => {
     try {
-        const goal = await Goal.findById(req.params.goalId).populate("contributions.contributor");
+        const goal = await Goal.findById(req.params.goalId)
+            .populate("contributions.contributor")
+            .populate("image");
         if (goal) {
             res.status(200).json(goal)
         } else {
             res.status(404).json({ message: "Meta no encontrada." })
-        }
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-}
-
-exports.updateGoal = async (req, res) => {
-    try {
-        const updtdGoal = await Goal.findByIdAndUpdate(
-            req.params.goalId,
-            req.body,
-            { new: true }
-        ).populate("contributions.contributor");
-
-        if (updtdGoal) {
-            res.status(200).json(updtdGoal);
-        } else {
-            res.status(404).json({ message: "Meta no encontrada para actualizar." })
-        }
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-}
-
-exports.discardGoal = async (req, res) => {
-    try {
-        const deleted = await Goal.findByIdAndDelete(req.params.goalId);
-        if (deleted) {
-            res.status(200).json({ message: "Meta eliminada correctamente." });
-        } else {
-            res.status(404).json({ message: "No se encontró la meta a eliminar." });
         }
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -86,8 +61,8 @@ exports.createContribution = async (req, res) => {
             return res.status(404).json({ message: "Meta no encontrada." });
         }
 
-        const { contributor, amount } = req.body;
-        
+        const { contributor, amount, description } = req.body;
+
         let contributorId = contributor;
         if (contributor && typeof contributor === 'object') {
             contributorId = contributor._id;
@@ -103,83 +78,20 @@ exports.createContribution = async (req, res) => {
 
         const newContribution = {
             contributor: contributorId,
-            amount: Number(amount)
+            amount: Number(amount),
+            description: description || ""
         };
 
         goal.contributions.push(newContribution);
         await goal.save();
-        
-        const updatedGoal = await Goal.findById(goal._id).populate("contributions.contributor");
+
+        const updatedGoal = await Goal.findById(goal._id)
+            .populate("contributions.contributor")
+            .populate("image");
         res.status(200).json(updatedGoal);
 
     } catch (error) {
         console.error("Error al registrar aporte:", error.message);
-        res.status(500).json({ error: error.message });
-    }
-}
-
-exports.findAllContributions = async (req, res) => {
-    try {
-        const goal = await Goal.findById(req.params.goalId).populate("contributions.contributor");
-        if (goal) {
-            res.status(200).json(goal.contributions || []);
-        } else {
-            res.status(404).json({ message: "Meta no encontrada." })
-        }
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-}
-
-exports.findOneContribution = async (req, res) => {
-    try {
-        const goal = await Goal.findById(req.params.goalId);
-        if (goal) {
-            const contribution = goal.contributions.id(req.params.contributionId);
-            if (contribution) {
-                res.status(200).json(contribution);
-            } else {
-                res.status(404).json({ message: "Aporte no encontrado." });
-            }
-        } else {
-            res.status(404).json({ message: "Meta no encontrada." });
-        }
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-}
-
-exports.updateContribution = async (req, res) => {
-    try {
-        const goal = await Goal.findById(req.params.goalId);
-        if (goal) {
-            const contribution = goal.contributions.id(req.params.contributionId);
-            if (contribution) {
-                Object.assign(contribution, req.body);
-                await goal.save();
-                res.status(200).json(goal);
-            } else {
-                res.status(404).json({ message: "Aporte no encontrado." })
-            }
-        } else {
-            res.status(404).json({ message: "Meta no encontrada." })
-        }
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-}
-
-exports.discardContribution = async (req, res) => {
-    try {
-        const goal = await Goal.findById(req.params.goalId);
-        if (goal) {
-            goal.contributions.pull(req.params.contributionId);
-            await goal.save();
-            res.status(200).json(goal);
-        } else {
-            res.status(404).json({ message: "Meta no encontrada." })
-        }
-    } catch (error) {
         res.status(500).json({ error: error.message });
     }
 }

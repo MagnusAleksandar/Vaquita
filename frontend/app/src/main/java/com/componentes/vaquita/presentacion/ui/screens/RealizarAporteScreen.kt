@@ -10,10 +10,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.componentes.vaquita.dominio.model.Goal
-import com.componentes.vaquita.dominio.model.Person
-import com.componentes.vaquita.presentacion.ui.viewmodel.AporteViewModel
-import com.componentes.vaquita.presentacion.ui.states.AporteUiState
+import com.componentes.vaquita.dominio.models.Goal
+import com.componentes.vaquita.dominio.models.Person
+import com.componentes.vaquita.presentacion.viewmodels.AporteViewModel
+import com.componentes.vaquita.dominio.states.UiState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -44,7 +44,7 @@ fun RealizarAporteScreen(
 
     // Manejo de éxito
     LaunchedEffect(uiState) {
-        if (uiState is AporteUiState.Success) {
+        if (uiState is UiState.Success) {
             onConfirmar()
             viewModel.resetState()
         }
@@ -74,7 +74,7 @@ fun RealizarAporteScreen(
             }
         }
     ) { padding ->
-        if (uiState is AporteUiState.Loading) {
+        if (uiState is UiState.Loading) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
@@ -94,17 +94,15 @@ fun RealizarAporteScreen(
                 Spacer(modifier = Modifier.height(25.dp))
 
                 // Error message
-                if (uiState is AporteUiState.Error) {
+                if (uiState is UiState.Error) {
                     Text(
-                        text = (uiState as AporteUiState.Error).message,
+                        text = (uiState as UiState.Error).message,
                         color = Color.Red,
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
                 }
 
-                // =========================
-                // LISTA MIEMBROS
-                // =========================
+
                 ExposedDropdownMenuBox(
                     expanded = expandedMiembro,
                     onExpandedChange = { expandedMiembro = !expandedMiembro }
@@ -115,7 +113,7 @@ fun RealizarAporteScreen(
                         readOnly = true,
                         label = { Text("Miembro") },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedMiembro) },
-                        modifier = Modifier.menuAnchor().fillMaxWidth(),
+                        modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable, true).fillMaxWidth(),
                         shape = RoundedCornerShape(16.dp)
                     )
                     ExposedDropdownMenu(
@@ -136,9 +134,6 @@ fun RealizarAporteScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // =========================
-                // LISTA METAS
-                // =========================
                 ExposedDropdownMenuBox(
                     expanded = expandedMeta,
                     onExpandedChange = { expandedMeta = !expandedMeta }
@@ -149,7 +144,7 @@ fun RealizarAporteScreen(
                         readOnly = true,
                         label = { Text("Meta") },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedMeta) },
-                        modifier = Modifier.menuAnchor().fillMaxWidth(),
+                        modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable, true).fillMaxWidth(),
                         shape = RoundedCornerShape(16.dp)
                     )
                     ExposedDropdownMenu(
@@ -170,9 +165,7 @@ fun RealizarAporteScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // =========================
-                // MONTO
-                // =========================
+
                 OutlinedTextField(
                     value = monto,
                     onValueChange = { monto = it },
@@ -183,9 +176,6 @@ fun RealizarAporteScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // =========================
-                // DESCRIPCION
-                // =========================
                 OutlinedTextField(
                     value = descripcion,
                     onValueChange = { descripcion = it },
@@ -200,7 +190,7 @@ fun RealizarAporteScreen(
                     onClick = {
                         miembroSeleccionado?.let { person ->
                             metaSeleccionada?._id?.let { goalId ->
-                                viewModel.registrarAporte(goalId, person, monto)
+                                viewModel.registrarAporte(goalId, person, monto, descripcion)
                             }
                         }
                     },

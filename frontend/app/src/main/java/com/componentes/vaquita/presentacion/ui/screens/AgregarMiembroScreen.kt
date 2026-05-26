@@ -10,8 +10,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.componentes.vaquita.presentacion.ui.viewmodel.PersonUiState
-import com.componentes.vaquita.presentacion.ui.viewmodel.PersonViewModel
+import com.componentes.vaquita.dominio.states.UiState
+import com.componentes.vaquita.presentacion.viewmodels.PersonViewModel
 
 @Composable
 fun AgregarMiembroScreen(
@@ -29,7 +29,7 @@ fun AgregarMiembroScreen(
 
     // Manejo de éxito
     LaunchedEffect(uiState) {
-        if (uiState is PersonUiState.Success) {
+        if (uiState is UiState.Success) {
             onGuardar()
             viewModel.resetState()
         }
@@ -59,7 +59,7 @@ fun AgregarMiembroScreen(
             }
         }
     ) { padding ->
-        if (uiState is PersonUiState.Loading) {
+        if (uiState is UiState.Loading) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
@@ -78,9 +78,9 @@ fun AgregarMiembroScreen(
 
                 Spacer(modifier = Modifier.height(25.dp))
 
-                if (uiState is PersonUiState.Error) {
+                if (uiState is UiState.Error) {
                     Text(
-                        text = (uiState as PersonUiState.Error).message,
+                        text = (uiState as UiState.Error).message,
                         color = Color.Red,
                         modifier = Modifier.padding(bottom = 8.dp)
                     )

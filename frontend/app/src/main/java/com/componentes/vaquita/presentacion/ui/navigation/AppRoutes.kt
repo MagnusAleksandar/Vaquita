@@ -1,18 +1,9 @@
 package com.componentes.vaquita.presentacion.ui.navigation
 
-import android.app.Application
 import androidx.compose.runtime.*
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.componentes.vaquita.data.services.ContributionApi
-import com.componentes.vaquita.data.services.GoalApi
-import com.componentes.vaquita.data.services.ImageApi
-import com.componentes.vaquita.data.services.PersonApi
-import com.componentes.vaquita.data.services.RetrofitClient
-import com.componentes.vaquita.data.services.repository.GoalRepository
-import com.componentes.vaquita.data.services.repository.PersonRepository
 import com.componentes.vaquita.presentacion.ui.screens.*
-import com.componentes.vaquita.presentacion.ui.viewmodel.*
+import com.componentes.vaquita.presentacion.viewmodels.*
 
 sealed class Screen {
     object Metas : Screen()
@@ -20,37 +11,16 @@ sealed class Screen {
     object RealizarAporte : Screen()
     object Miembros : Screen()
     object Aportes : Screen()
-    object EditarAporte : Screen()
     object AgregarMiembro : Screen()
-    object ModificarMeta : Screen()
     data class DetalleMeta(val goalId: String) : Screen()
 }
 
 @Composable
 fun AppRoutes() {
-    val context = LocalContext.current.applicationContext as Application
-
-    // APIs
-    val goalApi = RetrofitClient.create(GoalApi::class.java)
-    val personApi = RetrofitClient.create(PersonApi::class.java)
-    val contributionApi = RetrofitClient.create(ContributionApi::class.java)
-    val imageApi = RetrofitClient.create(ImageApi::class.java)
-
-    // Repositories
-    val goalRepository = GoalRepository(goalApi, contributionApi, imageApi)
-    val personRepository = PersonRepository(personApi)
-
-    // Factories
-    val metasFactory = MetasViewModelFactory(context, goalRepository)
-    val detalleMetaFactory = DetalleMetaViewModelFactory(context, goalRepository)
-    val aporteFactory = AporteViewModelFactory(context, goalRepository, personRepository)
-    val personFactory = PersonViewModelFactory(context, personRepository)
-
-    // ViewModels
-    val metasViewModel: MetasViewModel = viewModel(factory = metasFactory)
-    val detalleMetaViewModel: DetalleMetaViewModel = viewModel(factory = detalleMetaFactory)
-    val aporteViewModel: AporteViewModel = viewModel(factory = aporteFactory)
-    val personViewModel: PersonViewModel = viewModel(factory = personFactory)
+    val metasViewModel: MetasViewModel = viewModel()
+    val detalleMetaViewModel: DetalleMetaViewModel = viewModel()
+    val aporteViewModel: AporteViewModel = viewModel()
+    val personViewModel: PersonViewModel = viewModel()
 
     var currentScreen by remember {
         mutableStateOf<Screen>(Screen.Metas)
@@ -60,7 +30,8 @@ fun AppRoutes() {
         is Screen.Metas -> MetasScreen(
             viewModel = metasViewModel,
             onNuevaMeta = { currentScreen = Screen.CrearMeta },
-            onVerMeta = { id -> currentScreen = Screen.DetalleMeta(id)
+            onVerMeta = { id ->
+                currentScreen = Screen.DetalleMeta(id)
             },
             onVerMiembros = { currentScreen = Screen.Miembros },
             onVerAportes = { currentScreen = Screen.Aportes }
@@ -79,13 +50,12 @@ fun AppRoutes() {
             goalId = screen.goalId,
             viewModel = detalleMetaViewModel,
             onBack = { currentScreen = Screen.Metas },
-            onRealizarAporte = { 
-                currentScreen = Screen.RealizarAporte 
+            onRealizarAporte = {
+                currentScreen = Screen.RealizarAporte
             },
             onInicio = { currentScreen = Screen.Metas },
             onAportes = { currentScreen = Screen.Aportes },
-            onMiembros = { currentScreen = Screen.Miembros },
-            onModificarMeta = { currentScreen = Screen.ModificarMeta }
+            onMiembros = { currentScreen = Screen.Miembros }
         )
 
         is Screen.RealizarAporte -> RealizarAporteScreen(
@@ -99,21 +69,9 @@ fun AppRoutes() {
 
         is Screen.Aportes -> AportesScreen(
             viewModel = metasViewModel,
-            onEditarAporte = { contribution, goalId, goalName ->
-                aporteViewModel.seleccionarAporte(contribution, goalId, goalName)
-                currentScreen = Screen.EditarAporte
-            },
             onInicio = { currentScreen = Screen.Metas },
             onMiembros = { currentScreen = Screen.Miembros },
             onRealizarAportes = { currentScreen = Screen.RealizarAporte }
-        )
-
-        is Screen.EditarAporte -> EditarAporteScreen(
-            viewModel = aporteViewModel,
-            onGuardar = { currentScreen = Screen.Aportes },
-            onCancelar = { currentScreen = Screen.Aportes },
-            onInicio = { currentScreen = Screen.Metas },
-            onMiembros = { currentScreen = Screen.Miembros }
         )
 
         is Screen.Miembros -> MiembrosScreen(
@@ -127,14 +85,6 @@ fun AppRoutes() {
         is Screen.AgregarMiembro -> AgregarMiembroScreen(
             viewModel = personViewModel,
             onGuardar = { currentScreen = Screen.Miembros },
-            onInicio = { currentScreen = Screen.Metas },
-            onAportes = { currentScreen = Screen.Aportes },
-            onMiembros = { currentScreen = Screen.Miembros }
-        )
-
-        is Screen.ModificarMeta -> ModificarMetaScreen(
-            onGuardar = { currentScreen = Screen.Metas },
-            onEliminar = { currentScreen = Screen.Metas },
             onInicio = { currentScreen = Screen.Metas },
             onAportes = { currentScreen = Screen.Aportes },
             onMiembros = { currentScreen = Screen.Miembros }

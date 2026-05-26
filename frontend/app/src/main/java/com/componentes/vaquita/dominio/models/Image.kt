@@ -1,4 +1,4 @@
-package com.componentes.vaquita.dominio.model
+package com.componentes.vaquita.dominio.models
 
 import com.google.gson.annotations.SerializedName
 

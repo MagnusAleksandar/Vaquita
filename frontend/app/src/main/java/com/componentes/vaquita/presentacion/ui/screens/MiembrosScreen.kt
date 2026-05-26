@@ -16,8 +16,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.componentes.vaquita.presentacion.ui.states.MiembrosUiState
-import com.componentes.vaquita.presentacion.ui.viewmodel.PersonViewModel
+import com.componentes.vaquita.dominio.states.UiState
+import com.componentes.vaquita.presentacion.viewmodels.PersonViewModel
 
 @Composable
 fun MiembrosScreen(
@@ -71,17 +71,18 @@ fun MiembrosScreen(
         }
     ) { padding ->
         when (val state = uiState) {
-            is MiembrosUiState.Loading -> {
+            is UiState.Loading -> {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator()
                 }
             }
-            is MiembrosUiState.Error -> {
+            is UiState.Error -> {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Text("Error: ${state.message}", color = Color.Red)
                 }
             }
-            is MiembrosUiState.Success -> {
+            is UiState.Success -> {
+                val members = state.data
                 LazyColumn(
                     modifier = Modifier
                         .padding(padding)
@@ -97,7 +98,7 @@ fun MiembrosScreen(
                         Spacer(modifier = Modifier.height(20.dp))
                     }
 
-                    items(state.members) { person ->
+                    items(members) { person ->
                         Card(
                             modifier = Modifier
                                 .fillMaxWidth()

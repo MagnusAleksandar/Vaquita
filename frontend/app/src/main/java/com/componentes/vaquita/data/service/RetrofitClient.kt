@@ -1,4 +1,4 @@
-package com.componentes.vaquita.data.services
+package com.componentes.vaquita.data.service
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

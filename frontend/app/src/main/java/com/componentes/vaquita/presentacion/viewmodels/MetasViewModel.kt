@@ -1,49 +1,43 @@
-package com.componentes.vaquita.presentacion.ui.viewmodel
+package com.componentes.vaquita.presentacion.viewmodels
 
-import com.componentes.vaquita.data.services.repository.GoalRepository
+import com.componentes.vaquita.data.repositories.GoalRepository
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.componentes.vaquita.dominio.model.Goal
-import com.componentes.vaquita.presentacion.ui.states.MetasUiState
+import com.componentes.vaquita.dominio.models.Goal
+import com.componentes.vaquita.dominio.models.Image
+import com.componentes.vaquita.dominio.states.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import android.util.Log
 
-sealed class GoalCreationState {
-    object Idle : GoalCreationState()
-    object Loading : GoalCreationState()
-    object Success : GoalCreationState()
-    data class Error(val message: String) : GoalCreationState()
-}
-
 class MetasViewModel(
-    application: Application,
-    private val repository: GoalRepository
+    application: Application
 ) : AndroidViewModel(application) {
-    private val _uiState = MutableStateFlow<MetasUiState>(MetasUiState.Idle)
-    val uiState: StateFlow<MetasUiState> = _uiState.asStateFlow()
+    private val repository = GoalRepository()
+    private val _uiState = MutableStateFlow<UiState<List<Goal>>>(UiState.Idle)
+    val uiState: StateFlow<UiState<List<Goal>>> = _uiState.asStateFlow()
 
-    private val _creationState = MutableStateFlow<GoalCreationState>(GoalCreationState.Idle)
-    val creationState: StateFlow<GoalCreationState> = _creationState.asStateFlow()
+    private val _creationState = MutableStateFlow<UiState<Unit>>(UiState.Idle)
+    val creationState: StateFlow<UiState<Unit>> = _creationState.asStateFlow()
 
     fun getMetas() {
         Log.d("VAQUITA_APP", "Iniciando la carga de metas desde el servidor...")
-        _uiState.value = MetasUiState.Loading
+        _uiState.value = UiState.Loading
         viewModelScope.launch {
             val result = repository.getAllGoals()
             
             if (result.isSuccess) {
                 val listaMetas = result.getOrNull() ?: emptyList()
                 Log.d("VAQUITA_APP", "Se cargaron correctamente ${listaMetas.size} metas")
-                _uiState.value = MetasUiState.Success(listaMetas)
+                _uiState.value = UiState.Success(listaMetas)
             } else {
                 val error = result.exceptionOrNull()?.message ?: "Error desconocido"
                 Log.e("VAQUITA_APP", "Error al traer las metas: $error")
-                _uiState.value = MetasUiState.Error(error)
+                _uiState.value = UiState.Error(error)
             }
         }
     }
@@ -54,25 +48,16 @@ class MetasViewModel(
         
         if (name.isBlank() || montoInt == null || montoInt <= 0 || dueDate.isBlank()) {
             Log.w("VAQUITA_APP", "Validación fallida: Campos vacíos o monto inválido")
-            _creationState.value = GoalCreationState.Error("Por favor, llena todos los campos correctamente")
+            _creationState.value = UiState.Error("Por favor, llena todos los campos correctamente")
             return
         }
 
-        _creationState.value = GoalCreationState.Loading
+        _creationState.value = UiState.Loading
         viewModelScope.launch {
             try {
-                var imageId: String? = null
-                
-                // Si hay URL, primero creamos el registro de la imagen
-                if (urlImage.isNotBlank()) {
-                    val imgResult = repository.createImage(urlImage, "Imagen para $name")
-                    if (imgResult.isSuccess) {
-                        imageId = imgResult.getOrNull()?._id
-                        Log.d("VAQUITA_APP", "Imagen creada con ID: $imageId")
-                    } else {
-                        Log.e("VAQUITA_APP", "Error al guardar imagen, continuando sin ella")
-                    }
-                }
+                // Creamos el registro de la imagen directamente con la URL proporcionada (del banco de imágenes)
+                val imgResult = repository.createImage(urlImage, "Imagen para $name")
+                val imageObject = if (imgResult.isSuccess) imgResult.getOrNull() else null
 
                 val newGoal = Goal(
                     _id = null,
@@ -80,30 +65,30 @@ class MetasViewModel(
                     amount = montoInt,
                     dueDate = dueDate,
                     contributions = mutableListOf(),
-                    image = imageId
+                    image = imageObject
                 )
                 
                 val result = repository.createGoal(newGoal)
                 
                 if (result.isSuccess) {
                     Log.d("VAQUITA_APP", "Meta creada con éxito!")
-                    _creationState.value = GoalCreationState.Success
+                    _creationState.value = UiState.Success(Unit)
                     getMetas() // Refrescamos la lista automáticamente
                 } else {
                     val errorException = result.exceptionOrNull()
                     val errorMsg = errorException?.message ?: "Error al guardar"
                     Log.e("VAQUITA_APP", "Error al crear meta: $errorMsg", errorException)
-                    _creationState.value = GoalCreationState.Error("Error: $errorMsg")
+                    _creationState.value = UiState.Error("Error: $errorMsg")
                 }
             } catch (e: Exception) {
                 Log.e("VAQUITA_APP", "Excepción al crear meta: ${e.message}")
-                _creationState.value = GoalCreationState.Error("Error de conexión: ${e.message}")
+                _creationState.value = UiState.Error("Error de conexión: ${e.message}")
             }
         }
     }
 
     fun resetCreationState() {
         Log.d("VAQUITA_APP", "Reseteando el estado de creación")
-        _creationState.value = GoalCreationState.Idle
+        _creationState.value = UiState.Idle
     }
 }

@@ -22,8 +22,8 @@ import android.widget.Toast
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.layout.ContentScale
 import coil.compose.AsyncImage
-import com.componentes.vaquita.presentacion.ui.states.MetasUiState
-import com.componentes.vaquita.presentacion.ui.viewmodel.MetasViewModel
+import com.componentes.vaquita.dominio.states.UiState
+import com.componentes.vaquita.presentacion.viewmodels.MetasViewModel
 
 @Composable
 fun MetasScreen(
@@ -41,7 +41,7 @@ fun MetasScreen(
     }
 
     LaunchedEffect(uiState) {
-        if (uiState is MetasUiState.Success) {
+        if (uiState is UiState.Success) {
             Toast.makeText(context, "Conectado al servidor con éxito", Toast.LENGTH_SHORT).show()
         }
     }
@@ -71,17 +71,18 @@ fun MetasScreen(
         }
     ) { padding ->
         when (val state = uiState) {
-            is MetasUiState.Loading -> {
+            is UiState.Loading -> {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator()
                 }
             }
-            is MetasUiState.Error -> {
+            is UiState.Error -> {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Text("Error: ${state.message}", color = Color.Red)
                 }
             }
-            is MetasUiState.Success -> {
+            is UiState.Success -> {
+                val goals = state.data
                 LazyColumn(
                     modifier = Modifier
                         .padding(padding)
@@ -115,8 +116,8 @@ fun MetasScreen(
                         }
                     }
 
-                    if (state.goals.isNotEmpty()) {
-                        val principalGoal = state.goals.first()
+                    if (goals.isNotEmpty()) {
+                        val principalGoal = goals.first()
                         item {
                             Card(
                                 modifier = Modifier
@@ -164,9 +165,9 @@ fun MetasScreen(
                                                     RoundedCornerShape(12.dp)
                                                 )
                                         ) {
-                                            if (!principalGoal.image.isNullOrBlank()) {
+                                            if (!principalGoal.image?.url.isNullOrBlank()) {
                                                 AsyncImage(
-                                                    model = principalGoal.image,
+                                                    model = principalGoal.image?.url,
                                                     contentDescription = "Imagen de meta",
                                                     modifier = Modifier.fillMaxSize(),
                                                     contentScale = ContentScale.Crop
@@ -225,7 +226,7 @@ fun MetasScreen(
                             }
                         }
 
-                        if (state.goals.size > 1) {
+                        if (goals.size > 1) {
                             item {
                                 Text(
                                     text = "Otras metas",
@@ -233,7 +234,7 @@ fun MetasScreen(
                                     fontWeight = FontWeight.SemiBold
                                 )
                             }
-                            items(state.goals.drop(1)) { meta ->
+                            items(goals.drop(1)) { meta ->
                                 val totalAportadoOther = meta.contributions?.sumOf { it.amount ?: 0 } ?: 0
                                 val metaAmount = meta.amount ?: 0
                                 val progressOther = if (metaAmount > 0) totalAportadoOther.toFloat() / metaAmount else 0f
@@ -256,9 +257,9 @@ fun MetasScreen(
                                                 .size(55.dp)
                                                 .background(Color.LightGray, RoundedCornerShape(12.dp))
                                         ) {
-                                            if (!meta.image.isNullOrBlank()) {
+                                            if (!meta.image?.url.isNullOrBlank()) {
                                                 AsyncImage(
-                                                    model = meta.image,
+                                                    model = meta.image?.url,
                                                     contentDescription = "Imagen meta",
                                                     modifier = Modifier.fillMaxSize(),
                                                     contentScale = ContentScale.Crop

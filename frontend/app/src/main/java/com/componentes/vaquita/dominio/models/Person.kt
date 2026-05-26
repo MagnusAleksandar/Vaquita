@@ -1,4 +1,4 @@
-package com.componentes.vaquita.dominio.model
+package com.componentes.vaquita.dominio.models
 
 data class Person(
     val _id: String?,
