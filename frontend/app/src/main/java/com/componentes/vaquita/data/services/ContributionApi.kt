@@ -1,7 +1,7 @@
 package com.componentes.vaquita.data.services
 
-import com.componentes.vaquita.domain.model.Contribution
-import com.componentes.vaquita.domain.model.Goal
+import com.componentes.vaquita.dominio.model.Contribution
+import com.componentes.vaquita.dominio.model.Goal
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -18,36 +18,36 @@ interface ContributionApi {
         const val GOAL_ID = "mongoId"
     }
 
-    // Crea contribución
+    // Crea contribución (Retorna la meta actualizada)
     @POST("$BASE/{$GOAL_ID}/contributions")
     suspend fun createContribution(
         @Path(GOAL_ID) goalId: String,
         @Body contribution: Contribution
-    ): Response<Goal>
+    ): Goal
 
-    // Obtiene una contribución
+    // Obtiene una contribución específica
     @GET("$BASE/{$GOAL_ID}/contributions/{$CONTRIB_ID}")
-    suspend fun getOneContribution(
+    suspend fun findById(
         @Path(GOAL_ID) goalId: String,
         @Path(CONTRIB_ID) contributionId: String
-    ): Response<Contribution>
+    ): Contribution
 
-    // Obtiene todas las contribuciones
+    // Obtiene todas las contribuciones de una meta
     @GET("$BASE/{$GOAL_ID}/contributions")
-    suspend fun getAllContributions(@Path(GOAL_ID) goalId: String): Response<List<Contribution>>
+    suspend fun findAll(@Path(GOAL_ID) goalId: String): List<Contribution>
 
-    // Actualiza contribución
+    // Actualiza una contribución
     @PUT("$BASE/{$GOAL_ID}/contributions/{$CONTRIB_ID}")
     suspend fun updateContribution(
         @Path(GOAL_ID) goalId: String,
         @Path(CONTRIB_ID) contributionId: String,
         @Body contribution: Contribution
-    ): Response<Contribution>
+    ): Contribution
 
-    // Elimina contribución
+    // Elimina una contribución
     @DELETE("$BASE/{$GOAL_ID}/contributions/{$CONTRIB_ID}")
     suspend fun deleteContribution(
         @Path(GOAL_ID) goalId: String,
         @Path(CONTRIB_ID) contributionId: String
-    ) : Response<Contribution>
+    ) : Contribution
 }

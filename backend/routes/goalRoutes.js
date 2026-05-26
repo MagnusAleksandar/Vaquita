@@ -46,25 +46,24 @@ module.exports = router;
 /*
 Create:
 {
-    "goalName": "Nombre de la meta",
+    "name": "Nombre de la meta",
+    "amount": 1000000,
     "dueDate": "AAAA-MM-DD",
     "contributions": [ 
-        "contributor": "_id", <- de la contribución
-        "amount": n
+        {
+            "contributor": "_id",
+            "amount": 100000
+        }
     ],
-    "image": "_id" <- de la imagen
+    "image": "_id"
 }
 
 Example:
 {
-    "goalName": "Comprar carro",
+    "name": "Comprar carro",
+    "amount": 5000000,
     "dueDate": "2026-01-01",
-    "contributions": [
-        {
-            "contributor": "6a0dc6589a212803ac363f70",
-            "amount": 100000
-        }
-    ],
+    "contributions": [],
     "image": "6a0d16e1b9bf9d974cd337e2"
 }
 */

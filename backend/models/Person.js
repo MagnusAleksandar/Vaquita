@@ -1,15 +1,11 @@
 const mongoose = require("mongoose");
 
-const person = new mongoose.Schema({
-    persName:{
-        type: String
-    },
-    idNum:{
-        type: String
-    },
-    persPhone:{
-        type: String
-    }
+const personSchema = new mongoose.Schema({
+    persName: { type: String },
+    idNum: { type: String },
+    persPhone: { type: String }
+}, {
+    versionKey: false
 })
 
-module.exports = mongoose.model("Person", person);
+module.exports = mongoose.model("Person", personSchema);

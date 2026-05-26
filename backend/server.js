@@ -16,10 +16,10 @@ app.get("/ping", (req, res) => res.json({ ok: true }));
 
 mongoose.connect(process.env.MONGODB_URI)
 .then(() => {
-    console.log("Connected to MongoDB Atlas successfully");
+    console.log("Conexion exitosa a Mongo");
 })
 .catch((err) => {
-    console.log("Error connecting to MongoDB:", err.message);
+    console.log("Error al conectar a MongoDB:", err.message);
 });
 
 app.use("/api/person", persRoutes);
@@ -30,8 +30,8 @@ const PORT = process.env.PORT || 5000;
 
 try {
     app.listen(PORT, "0.0.0.0", () => {
-        console.log(`Server running on port ${PORT}`);
+        console.log(`Servidor corriendo en el puerto ${PORT}`);
     });
 } catch (error) {
-    console.error("Error starting server:", error.message);
+    console.error("Error al iniciar el servidor:", error.message);
 }

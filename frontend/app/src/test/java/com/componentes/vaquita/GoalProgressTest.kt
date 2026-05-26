@@ -1,8 +1,8 @@
 package com.componentes.vaquita
 
-import com.componentes.vaquita.domain.model.Contribution
-import com.componentes.vaquita.domain.model.Goal
-import com.componentes.vaquita.domain.model.Person
+import com.componentes.vaquita.dominio.model.Contribution
+import com.componentes.vaquita.dominio.model.Goal
+import com.componentes.vaquita.dominio.model.Person
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -11,7 +11,7 @@ class GoalProgressTest {
     @Test
     fun `calculo de ahorro total es correcto`() {
         // 1. Preparación (Given)
-        val persona = Person(_id = "1", persName = "David", idNum = "123")
+        val persona = Person(_id = "1", persName = "David", idNum = "123", persPhone = "321")
         val contribuciones = mutableListOf(
             Contribution(_id = "a", contributor = persona, amount = 100000),
             Contribution(_id = "b", contributor = persona, amount = 150000)
@@ -19,13 +19,14 @@ class GoalProgressTest {
         val meta = Goal(
             _id = "goal1",
             name = "Televisor",
+            amount = 500000,
             dueDate = "2026-12-31",
             contributions = contribuciones,
             image = "url_imagen"
         )
 
         // 2. Ejecución (When)
-        val totalAhorrado = meta.contributions.sumOf { it.amount }
+        val totalAhorrado = meta.contributions?.sumOf { it.amount ?: 0 } ?: 0
 
         // 3. Verificación (Then)
         // El total debería ser 250,000

@@ -15,7 +15,7 @@
         android:theme="@style/Theme.Vaquita"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".presentation.ui.activities.MainActivity"
+            android:name=".presentacion.ui.activities.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Vaquita">
             <intent-filter>

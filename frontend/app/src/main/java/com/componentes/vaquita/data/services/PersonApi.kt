@@ -1,6 +1,6 @@
 package com.componentes.vaquita.data.services
 
-import com.componentes.vaquita.domain.model.Person
+import com.componentes.vaquita.dominio.model.Person
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -19,24 +19,24 @@ interface PersonApi {
 
     // Crea persona
     @POST(BASE)
-    suspend fun createPerson(@Body person: Person): Response<Person>
+    suspend fun createPerson(@Body person: Person): Person
 
     // Obtiene una persona
     @GET(TEMPLATE)
-    suspend fun getOnePerson(@Path(ID) id: String): Response<Person>
+    suspend fun getOnePerson(@Path(ID) id: String): Person
 
     // Obtiene todas las personas
     @GET(BASE)
-    suspend fun getEveryone(): Response<List<Person>>
+    suspend fun findAll(): List<Person>
 
     // Actualiza persona
     @PUT(TEMPLATE)
     suspend fun updatePerson(
         @Path(ID) id: String,
         @Body person: Person
-    ): Response<Person>
+    ): Person
 
     // Elimina persona
     @DELETE(TEMPLATE)
-    suspend fun deletePerson(@Path(ID) id: String): Response<Person>
+    suspend fun deletePerson(@Path(ID) id: String): Person
 }
