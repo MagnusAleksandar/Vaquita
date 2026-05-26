@@ -1,0 +1,44 @@
+package com.componentes.vaquita
+
+import com.componentes.vaquita.domain.model.Contribution
+import com.componentes.vaquita.domain.model.Goal
+import com.componentes.vaquita.domain.model.Person
+import org.junit.Assert.assertEquals
+import org.junit.Test
+
+class GoalProgressTest {
+
+    @Test
+    fun `calculo de ahorro total es correcto`() {
+        // 1. Preparación (Given)
+        val persona = Person(_id = "1", persName = "David", idNum = "123")
+        val contribuciones = mutableListOf(
+            Contribution(_id = "a", contributor = persona, amount = 100000),
+            Contribution(_id = "b", contributor = persona, amount = 150000)
+        )
+        val meta = Goal(
+            _id = "goal1",
+            name = "Televisor",
+            dueDate = "2026-12-31",
+            contributions = contribuciones,
+            image = "url_imagen"
+        )
+
+        // 2. Ejecución (When)
+        val totalAhorrado = meta.contributions.sumOf { it.amount }
+
+        // 3. Verificación (Then)
+        // El total debería ser 250,000
+        assertEquals(250000, totalAhorrado)
+    }
+
+    @Test
+    fun `porcentaje de progreso es correcto`() {
+        val totalAhorrado = 1200000
+        val valorObjetivo = 3000000
+        
+        val porcentaje = (totalAhorrado.toFloat() / valorObjetivo.toFloat()) * 100
+        
+        assertEquals(40f, porcentaje, 0.1f)
+    }
+}

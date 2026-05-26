@@ -27,7 +27,7 @@ interface GoalApi {
 
     // Obtiene todas las metas
     @GET(BASE)
-    suspend fun getAllGoals(): Response<Goal>
+    suspend fun getAllGoals(): Response<List<Goal>>
 
     // Actualiza meta
     @PUT(TEMPLATE)

@@ -23,17 +23,17 @@ router.post("/", createGoal);
 
 router.get("/", findAllGoals);
 
-router.get("/:mongoId", findOneGoal);
+router.get("/:goalId", findOneGoal);
 
-router.put("/:mongoId", updateGoal);
+router.put("/:goalId", updateGoal);
 
-router.delete("/:mongoId", discardGoal);
+router.delete("/:goalId", discardGoal);
 
 // Contributions
 
-router.post("/:mongoId/contributions", createContribution);
+router.post("/:goalId/contributions", createContribution);
 
-router.get("/:mongoId/contributions", findAllContributions);
+router.get("/:goalId/contributions", findAllContributions);
 
 router.get("/:goalId/contributions/:contributionId", findOneContribution);
 

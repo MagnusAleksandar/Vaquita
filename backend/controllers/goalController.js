@@ -21,7 +21,7 @@ exports.createGoal = async (req, res) => {
 
 exports.findAllGoals = async (req, res) => {
     try {
-        const goals = await Goal.find();
+        const goals = await Goal.find().populate("contributions.contributor");
         if(goals){
             res.status(200).json(goals);
         }else{
@@ -37,7 +37,7 @@ exports.findAllGoals = async (req, res) => {
 
 exports.findOneGoal = async (req, res) => {
     try {
-        const goal = await Goal.findById(req.params.mongoId)
+        const goal = await Goal.findById(req.params.goalId).populate("contributions.contributor");
         if(goal){
             res.status(200).json(goal)
         }else{
@@ -53,7 +53,7 @@ exports.findOneGoal = async (req, res) => {
 exports.updateGoal = async (req, res) => {
     try {
         const updtdGoal = await Goal.findByIdAndUpdate (
-            req.params.mongoId,
+            req.params.goalId,
             req.body,
             { new: true }
 
@@ -73,7 +73,7 @@ exports.updateGoal = async (req, res) => {
 
 exports.discardGoal = async (req, res) => {
     try {
-        const deleted = await Goal.findByIdAndDelete (req.params.mongoId);
+        const deleted = await Goal.findByIdAndDelete (req.params.goalId);
         if (deleted){
             res.status(200).json({ message: "Goal discarded successfully." });
         }else{
@@ -89,23 +89,58 @@ exports.discardGoal = async (req, res) => {
 
 // Contributions
 exports.createContribution = async (req, res) => {
+    const { goalId } = req.params;
+    console.log("Creating contribution for goal:", goalId);
+    console.log("Contribution data received:", JSON.stringify(req.body, null, 2));
+
     try {
-        const goal = await Goal.findById(req.params.goalId);
-        if(goal){
-            goal.contributions.push(req.body);
-            await goal.save();
-            res.status(200).json(goal);
-        }else{
-            res.status(404).json({ message: "No Goal found." })
+        const goal = await Goal.findById(goalId);
+        if (!goal) {
+            console.log("Goal not found:", goalId);
+            return res.status(404).json({ message: "No Goal found." });
         }
+
+        const { contributor, amount } = req.body;
+        
+        // Extraer el ID del contribuyente si viene como objeto
+        let contributorId = contributor;
+        if (contributor && typeof contributor === 'object') {
+            contributorId = contributor._id;
+        }
+
+        if (!contributorId) {
+            console.log("Missing contributor ID");
+            return res.status(400).json({ message: "Contributor is required" });
+        }
+
+        if (!amount || isNaN(amount)) {
+            console.log("Invalid amount:", amount);
+            return res.status(400).json({ message: "Valid amount is required" });
+        }
+
+        const newContribution = {
+            contributor: contributorId,
+            amount: Number(amount)
+        };
+
+        console.log("Adding new contribution:", newContribution);
+        goal.contributions.push(newContribution);
+        await goal.save();
+        
+        // Retornamos el goal poblado
+        const updatedGoal = await Goal.findById(goal._id).populate("contributions.contributor");
+        console.log("Contribution saved successfully");
+        res.status(200).json(updatedGoal);
+
     } catch (error) {
+        console.error("Error creating contribution:", error.message);
         res.status(500).json({ error: error.message });
     }
 }
 
 exports.findAllContributions = async (req, res) => {
     try {
-        const goal = await Goal.findById(req.params.goalId);
+        const goal = await Goal.findById(req.params.goalId).populate("contributions.contributor");
         if(goal){
             if (goal.contributions){
                 res.status(200).json(goal.contributions);

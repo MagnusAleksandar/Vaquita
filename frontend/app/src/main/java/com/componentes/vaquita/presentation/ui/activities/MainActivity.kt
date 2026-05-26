@@ -3,7 +3,7 @@ package com.componentes.vaquita.presentation.ui.activities
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.componentes.vaquita.AppRoutes
+import com.componentes.vaquita.presentation.ui.navigation.AppRoutes
 
 class MainActivity : ComponentActivity() {
 

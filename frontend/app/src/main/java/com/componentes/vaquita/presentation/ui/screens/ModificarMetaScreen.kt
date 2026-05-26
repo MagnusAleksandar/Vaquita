@@ -1,4 +1,4 @@
-package com.example.appmetas.ui.screens
+package com.componentes.vaquita.presentation.ui.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape

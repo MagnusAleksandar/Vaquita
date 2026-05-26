@@ -27,7 +27,7 @@ interface PersonApi {
 
     // Obtiene todas las personas
     @GET(BASE)
-    suspend fun getEveryone(): Response<Person>
+    suspend fun getEveryone(): Response<List<Person>>
 
     // Actualiza persona
     @PUT(TEMPLATE)

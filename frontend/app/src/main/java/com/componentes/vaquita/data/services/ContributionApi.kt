@@ -1,6 +1,7 @@
 package com.componentes.vaquita.data.services
 
 import com.componentes.vaquita.domain.model.Contribution
+import com.componentes.vaquita.domain.model.Goal
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -14,27 +15,29 @@ interface ContributionApi {
     companion object{
         const val BASE = "api/goal"
         const val CONTRIB_ID = "contributionId"
-        const val GOAL_ID = "goalId"
-        const val TEMPLATE = "$BASE/{$GOAL_ID}/contributions/{$CONTRIB_ID}"
+        const val GOAL_ID = "mongoId"
     }
 
     // Crea contribución
-    @POST(BASE)
-    suspend fun createContribution(@Body contribution: Contribution): Response<Contribution>
+    @POST("$BASE/{$GOAL_ID}/contributions")
+    suspend fun createContribution(
+        @Path(GOAL_ID) goalId: String,
+        @Body contribution: Contribution
+    ): Response<Goal>
 
     // Obtiene una contribución
-    @GET(TEMPLATE)
+    @GET("$BASE/{$GOAL_ID}/contributions/{$CONTRIB_ID}")
     suspend fun getOneContribution(
         @Path(GOAL_ID) goalId: String,
         @Path(CONTRIB_ID) contributionId: String
     ): Response<Contribution>
 
     // Obtiene todas las contribuciones
-    @GET(BASE)
-    suspend fun getAllContributions(): Response<Contribution>
+    @GET("$BASE/{$GOAL_ID}/contributions")
+    suspend fun getAllContributions(@Path(GOAL_ID) goalId: String): Response<List<Contribution>>
 
     // Actualiza contribución
-    @PUT(TEMPLATE)
+    @PUT("$BASE/{$GOAL_ID}/contributions/{$CONTRIB_ID}")
     suspend fun updateContribution(
         @Path(GOAL_ID) goalId: String,
         @Path(CONTRIB_ID) contributionId: String,
@@ -42,7 +45,7 @@ interface ContributionApi {
     ): Response<Contribution>
 
     // Elimina contribución
-    @DELETE(TEMPLATE)
+    @DELETE("$BASE/{$GOAL_ID}/contributions/{$CONTRIB_ID}")
     suspend fun deleteContribution(
         @Path(GOAL_ID) goalId: String,
         @Path(CONTRIB_ID) contributionId: String

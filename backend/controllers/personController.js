@@ -35,11 +35,11 @@ exports.findAll = async (req, res) => {
 
 exports.findOne = async (req, res) => {
     try {
-        const person = await Person.findOne({persName: req.params.mongoId})
+        const person = await Person.findById(req.params.mongoId)
         if(person){
             res.status(200).json(person)
         }else{
-            res.status(404).json({ message: "No Person found." })
+            res.status(404).json({ message: "No Person found with that ID." })
         }
     } catch (error) {
         res.status(500).json({

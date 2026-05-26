@@ -1,10 +1,11 @@
 package com.componentes.vaquita.domain.model
 
-import android.media.Image
-import java.time.LocalDate
+import com.google.gson.annotations.SerializedName
+
 
 data class Goal(val _id: String?,
-                var name: String,
-                var dueDate: LocalDate,
-                var contributions: MutableList<Contribution>,
-                var image: Image)
+                @SerializedName("name") var name: String?,
+                var amount: Int?,
+                var dueDate: String?,
+                var contributions: MutableList<Contribution>?,
+                var image: String?)

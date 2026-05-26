@@ -7,12 +7,19 @@ const contribution = new mongoose.Schema({
     },
     amount:{
         type: Number
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
     }
 })
 
 const goal = new mongoose.Schema({
-    goalName:{
+    name:{
         type: String
+    },
+    amount:{
+        type: Number
     },
     dueDate:{
         type: String

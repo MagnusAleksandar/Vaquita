@@ -6,6 +6,9 @@ const person = new mongoose.Schema({
     },
     idNum:{
         type: String
+    },
+    persPhone:{
+        type: String
     }
 })
 
