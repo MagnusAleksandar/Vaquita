@@ -20,7 +20,10 @@ import androidx.compose.ui.unit.sp
 import com.componentes.vaquita.dominio.models.Contribution
 import com.componentes.vaquita.dominio.states.UiState
 import com.componentes.vaquita.presentacion.viewmodels.MetasViewModel
+<<<<<<< HEAD
 import java.text.NumberFormat
+=======
+>>>>>>> c02a626a6420fcd8bc3fbcdb7af30a161bb6f2aa
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -32,7 +35,10 @@ fun AportesScreen(
     onMiembros: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
+<<<<<<< HEAD
     val formato = NumberFormat.getCurrencyInstance(Locale("es", "CO"))
+=======
+>>>>>>> c02a626a6420fcd8bc3fbcdb7af30a161bb6f2aa
 
     LaunchedEffect(Unit) {
         viewModel.getMetas()
@@ -133,7 +139,11 @@ fun AportesScreen(
                                         }
 
                                         Text(
+<<<<<<< HEAD
                                             text = formato.format(contribution.amount ?: 0),
+=======
+                                            text = "$${contribution.amount}",
+>>>>>>> c02a626a6420fcd8bc3fbcdb7af30a161bb6f2aa
                                             color = Color(0xFF16A34A),
                                             fontWeight = FontWeight.Bold
                                         )

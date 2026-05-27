@@ -1,6 +1,10 @@
 package com.componentes.vaquita.presentacion.ui.screens
 
+<<<<<<< HEAD
 
+=======
+import androidx.compose.foundation.background
+>>>>>>> c02a626a6420fcd8bc3fbcdb7af30a161bb6f2aa
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -18,8 +22,11 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.componentes.vaquita.dominio.states.UiState
 import com.componentes.vaquita.presentacion.viewmodels.DetalleMetaViewModel
+<<<<<<< HEAD
 import java.text.NumberFormat
 import java.util.Locale
+=======
+>>>>>>> c02a626a6420fcd8bc3fbcdb7af30a161bb6f2aa
 
 @Composable
 fun DetalleMetaScreen(
@@ -32,7 +39,10 @@ fun DetalleMetaScreen(
     onMiembros: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
+<<<<<<< HEAD
     val formato = NumberFormat.getCurrencyInstance(Locale("es", "CO"))
+=======
+>>>>>>> c02a626a6420fcd8bc3fbcdb7af30a161bb6f2aa
 
     LaunchedEffect(goalId) {
         viewModel.getGoalById(goalId)
@@ -138,7 +148,11 @@ fun DetalleMetaScreen(
                             val percentage = (progress * 100).toInt()
                             
                             Text(
+<<<<<<< HEAD
                                 text = "${formato.format(totalAportado)} / ${formato.format (goalAmount)}",
+=======
+                                text = "$$totalAportado / $$goalAmount",
+>>>>>>> c02a626a6420fcd8bc3fbcdb7af30a161bb6f2aa
                                 color = Color.White
                             )
 
@@ -179,7 +193,11 @@ fun DetalleMetaScreen(
                     Spacer(modifier = Modifier.height(15.dp))
 
                     meta.contributions?.forEach { contribution ->
+<<<<<<< HEAD
                         Text("${contribution.contributor?.persName ?: "Desconocido"} = ${formato.format(contribution.amount ?: 0)}")
+=======
+                        Text("${contribution.contributor?.persName ?: "Desconocido"} - $${contribution.amount ?: 0}")
+>>>>>>> c02a626a6420fcd8bc3fbcdb7af30a161bb6f2aa
                         Spacer(modifier = Modifier.height(8.dp))
                     }
 

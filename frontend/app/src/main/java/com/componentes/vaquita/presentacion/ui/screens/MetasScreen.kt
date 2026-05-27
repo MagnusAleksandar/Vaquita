@@ -24,8 +24,11 @@ import androidx.compose.ui.layout.ContentScale
 import coil.compose.AsyncImage
 import com.componentes.vaquita.dominio.states.UiState
 import com.componentes.vaquita.presentacion.viewmodels.MetasViewModel
+<<<<<<< HEAD
 import java.text.NumberFormat
 import java.util.Locale
+=======
+>>>>>>> c02a626a6420fcd8bc3fbcdb7af30a161bb6f2aa
 
 @Composable
 fun MetasScreen(
@@ -37,7 +40,10 @@ fun MetasScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
+<<<<<<< HEAD
     val formato = NumberFormat.getCurrencyInstance(Locale("es", "CO"))
+=======
+>>>>>>> c02a626a6420fcd8bc3fbcdb7af30a161bb6f2aa
 
     LaunchedEffect(Unit) {
         viewModel.getMetas()
@@ -193,14 +199,22 @@ fun MetasScreen(
                                     )
                                     Spacer(modifier = Modifier.height(4.dp))
                                     Text(
+<<<<<<< HEAD
                                         text = formato.format(goalAmount),
+=======
+                                        text = "$$goalAmount",
+>>>>>>> c02a626a6420fcd8bc3fbcdb7af30a161bb6f2aa
                                         color = Color.White,
                                         fontSize = 30.sp,
                                         fontWeight = FontWeight.Bold
                                     )
                                     Spacer(modifier = Modifier.height(14.dp))
                                     Text(
+<<<<<<< HEAD
                                         text = "${formato.format(totalAportado)} / ${formato.format(goalAmount)}",
+=======
+                                        text = "$$totalAportado / $$goalAmount",
+>>>>>>> c02a626a6420fcd8bc3fbcdb7af30a161bb6f2aa
                                         color = Color.White.copy(alpha = 0.9f),
                                         fontSize = 14.sp
                                     )
